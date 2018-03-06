@@ -1,0 +1,45 @@
+Go implementation for Flatdata
+GDG Berlin Golang meetup
+12 Mar 2018
+
+Artem Nikitin
+System Engineer, HERE Technologies
+hi@artemnikitin.com
+https://artemnikitin.com
+@artemnikitin
+
+* Why Flatdata?
+
+Existed data format was optimized for embedded and client apps:
+
+- Reduced space consumption (Disk)
+- Incremental processing tile-by-tile (CPU)
+
+Drawbacks for backend:
+
+- Decoding tiles and reconstructing world representation (CPU Time)
+- Custom tile cache not shared between service processes (RAM)
+
+* Let's improve things!
+
+- Store all data in memory-mapped files
+- Store collections sorted to preserve locality
+- Use constant time lookups wherever possible
+- Avoid unnecessary copying of the data
+
+* Introducing Flatdata
+
+What is Flatdata?
+Flatdata is a library providing data structures for convenient creation, storage and access of packed memory-mappable structures with minimal overhead. 
+
+Library consists of:
+
+- Schema language
+- Code generators for target languages
+- Target language libraries
+
+* Flatdata Philosophy
+
+sss
+
+
