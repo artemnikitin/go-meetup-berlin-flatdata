@@ -38,8 +38,36 @@ Library consists of:
 - Code generators for target languages
 - Target language libraries
 
-* Flatdata Philosophy
+* When it's useful?
 
-sss
+- Your data updates infrequently and accessed much more often than updated
+- You can afford to recreate the full data archive every time 
+- Your data fits in the RAM on target instance
+- You want to optimize your data to be cache-friendly
+
+* Example 
+
+    namespace coappearances {    
+
+    struct Meta {    
+        title_ref : u32 : 32;    
+        author_ref : u32 : 32;   
+    }       
+     
+    // And so on ...        
+
+    archive Graph {     
+        meta : Meta;    
+        vertices : vector< Character >; 
+        edges : vector< Coappearance >; 
+        vertices_data: multivector< 32, Nickname, Description, UnaryRelation, BinaryRelation >; 
+        chapters : vector< Chapter >;   
+        strings: raw_data;  
+    }   
+
+    }        
+
+* 
+
 
 
