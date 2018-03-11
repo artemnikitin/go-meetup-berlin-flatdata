@@ -13,39 +13,44 @@ https://artemnikitin.com
 Existed data format was optimized for embedded and client apps:
 
 - Reduced space consumption (Disk)
+
 - Incremental processing tile-by-tile (CPU)
 
 Drawbacks for backend:
 
 - Decoding tiles and reconstructing world representation (CPU Time)
+
 - Custom tile cache not shared between service processes (RAM)
-
-* Let's improve things!
-
-- Store all data in memory-mapped files
-- Store collections sorted to preserve locality
-- Use constant time lookups wherever possible
-- Avoid unnecessary copying of the data
 
 * Introducing Flatdata
 
 What is Flatdata?
+
 Flatdata is a library providing data structures for convenient creation, storage and access of packed memory-mappable structures with minimal overhead. 
 
 Library consists of:
 
 - Schema language
+
 - Code generators for target languages
+
 - Target language libraries
 
 * When it's useful?
 
 - Your data updates infrequently and accessed much more often than updated
+
 - You can afford to recreate the full data archive every time 
+
 - Your data fits in the RAM on target instance
+
 - You want to optimize your data to be cache-friendly
 
-* Example 
+* Example
+
+.link https://github.com/artemnikitin/flatdata-go-coappearances-example
+
+Schema 
 
     namespace coappearances {    
 
@@ -60,14 +65,34 @@ Library consists of:
         meta : Meta;    
         vertices : vector< Character >; 
         edges : vector< Coappearance >; 
-        vertices_data: multivector< 32, Nickname, Description, UnaryRelation, BinaryRelation >; 
+        vertices_data : multivector< 32, Nickname, Description, UnaryRelation, BinaryRelation >; 
         chapters : vector< Chapter >;   
-        strings: raw_data;  
+        strings : raw_data;  
     }   
 
     }        
 
-* 
+* Example
 
+Generate sources based on schema
 
+	app.py -v -g go \
+	-s coappearances.flatdata \
+	-O coappearances/coappearances_generated.go
+
+Generated Go code isn't properly Go formated!
+
+* Example
+
+Use generated sources
+
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	
+	cg, err := coappearances.OpenGraphArchive(flatdata.NewFileResourceStorage("flatdata/Graph.archive"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer cg.Close()
+
+	fmt.Println(cg.ToString())
 
