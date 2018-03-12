@@ -35,11 +35,15 @@ Library consists of:
 
 - Target language libraries
 
+Difference from Protobuf and Co?
+
+Instead of message passing it's oriented on efficient access to data stored in an immutable data storage.
+
 * When it's useful?
 
 - Your data updates infrequently and accessed much more often than updated
 
-- You can afford to recreate the full data archive every time 
+- You can afford to recreate the full data archive on every update
 
 - Your data fits in the RAM on target instance
 
@@ -95,7 +99,7 @@ Use generated sources
 
 	fmt.Println(cg.ToString())
 
-* How it works
+* How it works (generated code)
 
 	vertices := cg.VerticesVector
 
@@ -104,14 +108,14 @@ Use generated sources
 		IsOptional bool
 		IsOpen     bool
 	}
+	// ------
+	entry := vertices.Get(5)	
 
-	entry := vertices.Get(5)
-	
 	type Character struct {
 		descriptor flatdata.MemoryDescriptor
 		position   int
 	}
-
+	// ------
 	value := entry.GetNameRef()
 
 	func (v *Character) GetNameRef() uint32 {
@@ -121,7 +125,44 @@ Use generated sources
 		return uint32(result)
 	}
 
-* 
+* How it works (Go common lib)
+
+	type ResourceStorage interface {
+		GetMemoryDescriptor(name string) (MemoryDescriptor, string, error)
+		GetBasePath() string
+	}
+
+	// FileResourceStorage implements ResourceStorage interface for memory-mapped file
+	type FileResourceStorage struct {
+		...
+	}
+
+	// -----
+
+	type MemoryDescriptor interface {
+		io.ReaderAt
+		Close() error	
+		Len() int
+		At(i int) byte
+	}
+
+	// golang.org/x/exp/mmap
+	// ReaderAt reads a memory-mapped file.
+	type ReaderAt struct {
+		...
+	}
+
+* How it works (Go common lib)
+
+Implemented in _flatdata/flatdata-go/flatdata/reader.go_
+	
+	func Read(descriptor MemoryDescriptor, offset, size uint, signed bool) int {
+		...
+	}
+
+In the future, current implementation will be replaced by existed C++ implementation
+
+Warning! Common lib shouldn't be used directly by developer!
 
 * Current status of Go implementation of reader
 
