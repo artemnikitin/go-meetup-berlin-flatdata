@@ -1,6 +1,5 @@
-Go implementation for Flatdata
+Flatdata reader in Go
 GDG Berlin Golang meetup
-12 Mar 2018
 
 Artem Nikitin
 System Engineer, HERE Technologies
@@ -95,4 +94,57 @@ Use generated sources
 	defer cg.Close()
 
 	fmt.Println(cg.ToString())
+
+* How it works
+
+	vertices := cg.VerticesVector
+
+	type GraphVerticesVector struct {
+		descriptor flatdata.MemoryDescriptor
+		IsOptional bool
+		IsOpen     bool
+	}
+
+	entry := vertices.Get(5)
+	
+	type Character struct {
+		descriptor flatdata.MemoryDescriptor
+		position   int
+	}
+
+	value := entry.GetNameRef()
+
+	func (v *Character) GetNameRef() uint32 {
+		elementSizeInBits := uint(32)
+		elementOffset := uint(0)
+		result := flatdata.Read(v.descriptor, (uint(v.position)*8)+elementOffset, elementSizeInBits, false)
+		return uint32(result)
+	}
+
+* 
+
+* Current status of Go implementation of reader
+
+
+- It's feature complete comparing to C++/Python
+
+- It's passes tests for C++/Python implementations
+
+- Probably, a lots of bugs missed :)
+
+- Performance is unclear
+
+- No guarantees of backward compatible changes for public API
+
+* Roadmap
+
+
+- Some changes to API
+
+- Fixing bugs
+
+- Measuring and fixing (if needed) performance
+
+- Writer in Go
+
 
