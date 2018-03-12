@@ -31,6 +31,8 @@ Drawbacks for backend:
 
 * Introducing Flatdata
 
+.link https://github.com/heremaps/flatdata
+
 What is Flatdata?
 
 Flatdata is a library providing data structures for convenient creation, storage and access of packed memory-mappable structures with minimal overhead. 
