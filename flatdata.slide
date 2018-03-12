@@ -7,6 +7,14 @@ hi@artemnikitin.com
 https://artemnikitin.com
 @artemnikitin
 
+* Slides are already available!
+
+.link https://goo.gl/tmExS3
+
+.image qrcode.png
+
+Slides in PDF will be available soon!
+
 * Why Flatdata?
 
 Existed data format was optimized for embedded and client apps:
@@ -164,7 +172,28 @@ In the future, current implementation will be replaced by existed C++ implementa
 
 Warning! Common lib shouldn't be used directly by developer!
 
-* Current status of Go implementation of reader
+* Implementation comparison
+
+- Lot's of boilerplate in generated Go code (hi, generics!)
+
+- Common lib vs generated code (LOC)
+	   
+	   Example from github.com/artemnikitin/flatdata-go-coappearances-example:
+	   C++:    2253 vs 2002
+	   Go:     1325 vs 1072
+	   Python: 330  vs 399
+
+	   Our production schema:
+	   C++:    2253 vs 18393
+	   Go:     1325 vs 11480
+	   Python: 330  vs 6024
+
+- Maturity level
+	C++:    feature complete | very efficient      | used in production     | has writer
+	Python: feature complete | slow                | debugging, tooling etc | no writer
+	Go: 	feature complete | performance unclear | beta                   | no writer
+
+* Current status of Go implementation
 
 
 - It's feature complete comparing to C++/Python
@@ -177,6 +206,8 @@ Warning! Common lib shouldn't be used directly by developer!
 
 - No guarantees of backward compatible changes for public API
 
+- No writer :(
+
 * Roadmap
 
 
@@ -186,6 +217,6 @@ Warning! Common lib shouldn't be used directly by developer!
 
 - Measuring and fixing (if needed) performance
 
-- Writer in Go
+- Writer in Go!
 
 
